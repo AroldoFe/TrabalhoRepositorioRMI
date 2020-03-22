@@ -12,23 +12,24 @@ import java.util.Random;
 
 public class ServidorImpl extends UnicastRemoteObject implements InterfaceServidor {
     private List<InterfaceRepositorio> repositorios;
-    public Random gerador;
+//    public Random gerador;
 
     public ServidorImpl() throws RemoteException {
         this.repositorios = new ArrayList<>();
-        this.gerador = new Random();
+//        this.gerador = new Random();
     }
 
     @Override
-    public void armazenar(String palavra) throws RemoteException {
+    public void armazenar(String palavra, Integer posicaoRepositorio) throws RemoteException {
         Boolean palavraGuardada = false;
         while (!palavraGuardada) {
-            for (InterfaceRepositorio repositorio : repositorios) {
-                if (this.gerador.nextBoolean()) {
-                    palavraGuardada = true;
-                    repositorio.armazenar(palavra);
-                }
-            }
+        	repositorios.get(posicaoRepositorio).armazenar(palavra);
+//            for (InterfaceRepositorio repositorio : repositorios) {
+//                if (this.gerador.nextBoolean()) {
+//                    palavraGuardada = true;
+//                    repositorio.armazenar(palavra);
+//                }
+//            }
         }
     }
 

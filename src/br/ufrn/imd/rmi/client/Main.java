@@ -13,9 +13,12 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
-        InterfaceServidor servidor = (InterfaceServidor) Naming.lookup("rmi://localhost:2000/Servidor");
+    	Scanner scanner = new Scanner(System.in);
+    	System.out.println("Ip do servidor de repositórios: \t");
+        String ipServidor = scanner.next();
+        InterfaceServidor servidor = (InterfaceServidor) Naming.lookup("rmi://"+ipServidor+":2000/Servidor");
         InterfaceCliente cliente = new ClienteImpl();
-        Scanner scanner = new Scanner(System.in);
+        
         Integer opcao = 0;
         while (opcao != -1) {
             System.out.println(StringUtils.OPCOES);
@@ -23,7 +26,12 @@ public class Main {
             if(opcao.equals(1)) {
                 System.out.println(StringUtils.GUARDAR_PALAVRA);
                 String palavra = scanner.next();
-                servidor.armazenar(palavra);
+                
+                System.out.println("Escolha um repositório: ");
+                System.out.println(servidor.getRepositorios().toString());
+                Integer posicaoRepositorio = scanner.nextInt();
+               
+                servidor.armazenar(palavra, posicaoRepositorio);
             } else if (opcao.equals(2)) {
                 System.out.println(StringUtils.BUSCAR_PALAVRA);
                 String palavra = scanner.next();

@@ -7,4 +7,7 @@ public interface InterfaceRepositorio extends Remote {
     void armazenar(String palavra) throws RemoteException;
     void buscar(InterfaceCliente cliente, String palavra) throws RemoteException;
     String getNome() throws RemoteException;
+    String getIp() throws RemoteException;
+    String getEndereco() throws RemoteException;
+    Integer getPorta() throws RemoteException;
 }
