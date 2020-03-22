@@ -11,36 +11,42 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class Main {
+	
+	/*
+	 * Responsável por mostrar uma interface de comunicação para o usuário.
+	 */
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
-    	Scanner scanner = new Scanner(System.in);
-    	System.out.println("Ip do servidor de repositórios: \t");
-        String ipServidor = scanner.next();
-        InterfaceServidor servidor = (InterfaceServidor) Naming.lookup("rmi://"+ipServidor+":2000/Servidor");
+    	// Conecta-se ao servidor
+        InterfaceServidor servidor = (InterfaceServidor) Naming.lookup("rmi://127.0.0.1:2000/Servidor");
         InterfaceCliente cliente = new ClienteImpl();
         
+        Scanner scanner = new Scanner(System.in);
         Integer opcao = 0;
+        String palavra;
+        
         while (opcao != -1) {
+        	
             System.out.println(StringUtils.OPCOES);
             opcao = scanner.nextInt();
-            if(opcao.equals(1)) {
-                System.out.println(StringUtils.GUARDAR_PALAVRA);
-                String palavra = scanner.next();
-                
-                System.out.println("Escolha um repositório: ");
-                System.out.println(servidor.getRepositorios().toString());
-                Integer posicaoRepositorio = scanner.nextInt();
-               
-                servidor.armazenar(palavra, posicaoRepositorio);
-            } else if (opcao.equals(2)) {
-                System.out.println(StringUtils.BUSCAR_PALAVRA);
-                String palavra = scanner.next();
-                servidor.buscar(cliente, palavra);
-            } else if(opcao.equals(-1)) {
-                break;
-            } else {
-                System.out.println(StringUtils.OPCAO_INVALIDA);
-            }
+            
+            switch(opcao) {
+	        	case 1:
+	        		System.out.println(StringUtils.GUARDAR_PALAVRA);
+	                palavra = scanner.next();
+	                servidor.armazenar(palavra);
+	    		break;
+	        	case 2:
+	        		 System.out.println(StringUtils.BUSCAR_PALAVRA);
+	                 palavra = scanner.next();
+	                 servidor.buscar(cliente, palavra);
+	    		break;
+	        	case -1:
+	    		break;
+	        	default:
+	        		System.out.println(StringUtils.OPCAO_INVALIDA);
+	        		
+           }
         }
     }
 }

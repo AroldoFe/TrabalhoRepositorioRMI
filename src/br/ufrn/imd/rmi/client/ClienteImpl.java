@@ -1,14 +1,16 @@
 package br.ufrn.imd.rmi.client;
 
-import br.ufrn.imd.rmi.interfaces.InterfaceCliente;
-import br.ufrn.imd.rmi.interfaces.InterfaceRepositorio;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class ClienteImpl extends UnicastRemoteObject implements InterfaceCliente {
+import br.ufrn.imd.rmi.interfaces.InterfaceCliente;
+import br.ufrn.imd.rmi.interfaces.InterfaceRepositorio;
 
-    public ClienteImpl() throws RemoteException {
+public class ClienteImpl extends UnicastRemoteObject implements InterfaceCliente {
+	
+	private static final long serialVersionUID = 3986832337945698321L;
+
+	public ClienteImpl() throws RemoteException {
     }
 
     @Override

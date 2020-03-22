@@ -9,18 +9,10 @@ import br.ufrn.imd.rmi.interfaces.InterfaceServidor;
 
 public class Main {
     public static void main(String[] args) throws RemoteException, MalformedURLException{
+    	// Incializa o servidor
         InterfaceServidor servidor = new ServidorImpl();
         System.setProperty("java.rmi.server.hostname", "127.0.0.1");
         LocateRegistry.createRegistry(2000);
         Naming.rebind("rmi://127.0.0.1:2000/Servidor", servidor);
-//        while (true) {
-//        	System.out.println(servidor.getRepositorios().toString());
-//        	try {
-//				Thread.sleep(10000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//        }
     }
 }
