@@ -4,11 +4,7 @@ import br.ufrn.imd.rmi.interfaces.InterfaceCliente;
 import br.ufrn.imd.rmi.interfaces.InterfaceRepositorio;
 import br.ufrn.imd.rmi.interfaces.InterfaceServidor;
 
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +15,6 @@ public class ServidorImpl extends UnicastRemoteObject implements InterfaceServid
     public Random gerador;
 
     public ServidorImpl() throws RemoteException {
-        super();
         this.repositorios = new ArrayList<>();
         this.gerador = new Random();
     }
@@ -45,19 +40,7 @@ public class ServidorImpl extends UnicastRemoteObject implements InterfaceServid
     }
 
     @Override
-    public List<InterfaceRepositorio> getRepositorios() {
+    public List<InterfaceRepositorio> getRepositorios() throws RemoteException {
         return this.repositorios;
-    }
-
-    public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
-        InterfaceServidor servidor = new ServidorImpl();
-
-        servidor.getRepositorios().add( (InterfaceRepositorio) Naming.lookup("rmi://127.0.0.1:2001/Repositorio1"));
-        servidor.getRepositorios().add( (InterfaceRepositorio) Naming.lookup("rmi://127.0.0.1:2002/Repositorio1"));
-        servidor.getRepositorios().add( (InterfaceRepositorio) Naming.lookup("rmi://127.0.0.1:2003/Repositorio1"));
-
-        System.setProperty("java.rmi.server.hostname","127.0.0.1");
-        LocateRegistry.createRegistry(2000);
-        Naming.rebind("rmi://127.0.0.1:1098/Servidor", servidor);
     }
 }

@@ -11,16 +11,16 @@ public class Main {
     public static void main(String[] args) throws RemoteException, MalformedURLException {
         System.setProperty("java.rmi.server.hostname", "127.0.0.1");
 
-        /*InterfaceRepositorio repositorio = new RepositorioImpl("Repositorio1");
+        InterfaceRepositorio repositorio1 = new RepositorioImpl("Repositorio1");
         LocateRegistry.createRegistry(2001);
-        Naming.rebind("rmi://127.0.0.1:2001/Repositorio1", repositorio);*/
+        Naming.rebind("rmi://127.0.0.1:2001/Repositorio1", repositorio1);
 
-         /*InterfaceRepositorio repositorio = new RepositorioImpl("Repositorio2");
+         InterfaceRepositorio repositorio2 = new RepositorioImpl("Repositorio2");
          LocateRegistry.createRegistry(2002);
-         Naming.rebind("rmi://127.0.0.1:2002/Repositorio2", repositorio);*/
+         Naming.rebind("rmi://127.0.0.1:2002/Repositorio2", repositorio2);
 
-         InterfaceRepositorio repositorio = new RepositorioImpl("Repositorio3");
+         InterfaceRepositorio repositorio3 = new RepositorioImpl("Repositorio3");
          LocateRegistry.createRegistry(2003);
-         Naming.rebind("rmi://127.0.0.1:2003/Repositorio3", repositorio);
+         Naming.rebind("rmi://127.0.0.1:2003/Repositorio3", repositorio3);
     }
 }
