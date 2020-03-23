@@ -8,5 +8,5 @@ public interface InterfaceServidor extends Remote {
     void armazenar(String palavra) throws RemoteException;
     void buscar(InterfaceCliente cliente, String palavra) throws RemoteException;
     List<InterfaceRepositorio> getRepositorios() throws RemoteException;
-
+    void registrarRepositorio(InterfaceRepositorio repositorio) throws RemoteException;
 }
