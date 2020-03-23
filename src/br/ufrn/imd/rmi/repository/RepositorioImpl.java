@@ -1,33 +1,39 @@
 package br.ufrn.imd.rmi.repository;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.HashSet;
+import java.util.Set;
+
 import br.ufrn.imd.rmi.interfaces.InterfaceCliente;
 import br.ufrn.imd.rmi.interfaces.InterfaceRepositorio;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
-
 public class RepositorioImpl extends UnicastRemoteObject implements InterfaceRepositorio {
-    private String nome;
-    private List<String> palavras;
+	private static final long serialVersionUID = -1553069973323620029L;
+	
+	private String nome;
+	
+    private String ip;
+    
+    private Integer porta;
+    
+    private Set<String> palavras;
 
     public RepositorioImpl() throws RemoteException {
         super();
-        this.palavras = new ArrayList<>();
+        this.palavras = new HashSet<>();
     }
 
-    public RepositorioImpl(String nome) throws RemoteException {
+    public RepositorioImpl(String nome, String ip, Integer porta) throws RemoteException {
         this();
         this.nome = nome;
-
+        this.ip = ip;
+        this.porta = porta;
     }
 
     @Override
     public void armazenar(String palavra) throws RemoteException {
-        if (!this.palavras.contains(palavra)) {
-            this.palavras.add(palavra);
-        }
+        this.palavras.add(palavra);
     }
 
     @Override
@@ -41,5 +47,19 @@ public class RepositorioImpl extends UnicastRemoteObject implements InterfaceRep
     public String getNome() throws RemoteException {
         return this.nome;
     }
+    
+    @Override
+	public String getIp() throws RemoteException {
+		return this.ip;
+	}
 
+	@Override
+	public String getEndereco() throws RemoteException {
+		return "rmi://" + this.ip +":"+this.porta+"/" + this.nome;
+	}
+
+	@Override
+	public Integer getPorta() throws RemoteException {
+		return this.porta;
+	}
 }
