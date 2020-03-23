@@ -9,6 +9,7 @@ import java.util.Random;
 import br.ufrn.imd.rmi.interfaces.InterfaceCliente;
 import br.ufrn.imd.rmi.interfaces.InterfaceRepositorio;
 import br.ufrn.imd.rmi.interfaces.InterfaceServidor;
+import br.ufrn.imd.rmi.utils.StringUtils;
 
 public class ServidorImpl extends UnicastRemoteObject implements InterfaceServidor {
 	
@@ -27,15 +28,19 @@ public class ServidorImpl extends UnicastRemoteObject implements InterfaceServid
      */
     @Override
     public void armazenar(String palavra) throws RemoteException {
-        Boolean palavraGuardada = false;
-        while (!palavraGuardada) {
-            for (InterfaceRepositorio repositorio : repositorios) {
-                if (this.gerador.nextBoolean()) {
-                    palavraGuardada = true;
-                    repositorio.armazenar(palavra);
+    	if (this.repositorios.size() == 0) {
+    		System.out.println(StringUtils.NENHUM_REPOSITORIO_SERVIDOR);
+    	}else {
+    		Boolean palavraGuardada = false;
+            while (!palavraGuardada) {
+                for (InterfaceRepositorio repositorio : repositorios) {
+                    if (this.gerador.nextBoolean()) {
+                        palavraGuardada = true;
+                        repositorio.armazenar(palavra);
+                    }
                 }
             }
-        }
+    	}
     }
     
     /*
@@ -43,9 +48,13 @@ public class ServidorImpl extends UnicastRemoteObject implements InterfaceServid
      */
     @Override
     public void buscar(InterfaceCliente cliente, String palavra) throws RemoteException {
-        for (InterfaceRepositorio repositorio : repositorios) {
-            repositorio.buscar(cliente, palavra);
-        }
+    	if (this.repositorios.size() == 0) {
+    		System.out.println(StringUtils.NENHUM_REPOSITORIO_SERVIDOR);
+    	}else {
+    		for (InterfaceRepositorio repositorio : repositorios) {
+                repositorio.buscar(cliente, palavra);
+            }
+    	}
     }
 
     @Override

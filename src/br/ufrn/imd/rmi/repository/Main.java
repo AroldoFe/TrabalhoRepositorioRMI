@@ -14,17 +14,35 @@ import br.ufrn.imd.rmi.interfaces.InterfaceServidor;
 import br.ufrn.imd.rmi.utils.StringUtils;
 
 public class Main {
-    public static void main(String[] args) throws RemoteException, MalformedURLException{
+	
+	@SuppressWarnings({ "resource", "null" })
+    public static void main(String[] args) throws RemoteException{
     	System.setProperty("java.rmi.server.hostname", "127.0.0.1");
     	
+    	Scanner scanner = new Scanner(System.in);
+    	
+    	System.out.println(StringUtils.ENDERECO_SERVIDOR);
+    	String enderecoServidor = scanner.next();
+    	
+    	if (enderecoServidor.isBlank() || enderecoServidor.isEmpty()) {
+    		throw new RemoteException("Endereco do servidor inválido");
+    	}
+    	
     	// Conecta-se com o servidor
-        InterfaceServidor servidor;
-		try {
-			servidor = (InterfaceServidor) Naming.lookup("rmi://127.0.0.1:2000/Servidor");
-		} catch (NotBoundException e) {
-			throw new RemoteException("Ocorreu um problema na conexão com o servidor.");
-		}
+        InterfaceServidor servidor = null;
         
+		try {
+			servidor = (InterfaceServidor) Naming.lookup("rmi://"+enderecoServidor);
+		} catch (NotBoundException e) {
+			throw new RemoteException("Nenhuma servidor encontrado");
+		} catch(MalformedURLException e) {
+			throw new RemoteException("Url do servidor mal formada");
+		}
+		
+		if(servidor == null) {
+			return;
+		}
+		
         // Pega o host da máquina
         InetAddress inetAddress;
 		try {
@@ -36,10 +54,13 @@ public class Main {
     	// Pega o endereço IP
 		String ipRepositorio = inetAddress.getHostAddress();
         
-		Scanner scanner = new Scanner(System.in);
 		// Requisita o usuário o nome do repositório
     	System.out.println(StringUtils.NOME_REPOSITORIO);
     	String nomeRepositorio = scanner.next();
+    	
+    	if (nomeRepositorio.isBlank() || nomeRepositorio.isEmpty()) {
+    		throw new RemoteException("Nome do repositório inválido");
+    	}
     	
     	// Requisita o usuário a porta do repositório
     	System.out.println(StringUtils.PORTA_REPOSITORIO);
@@ -47,7 +68,11 @@ public class Main {
     	
         InterfaceRepositorio repositorio = new RepositorioImpl(nomeRepositorio, ipRepositorio, portaRepositorio);
         LocateRegistry.createRegistry(repositorio.getPorta());
-        Naming.rebind(repositorio.getEndereco(), repositorio);
+        try {
+			Naming.rebind(repositorio.getEndereco(), repositorio);
+		} catch (MalformedURLException e) {
+			throw new RemoteException("Erro nregistro do repositório");
+		}
         
         // Adiciona o repositório a lista dos repositórios que o servidor escuta.
         servidor.registrarRepositorio(repositorio);
